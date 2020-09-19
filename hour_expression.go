@@ -2,6 +2,7 @@ package timeexpression
 
 import (
 	"errors"
+	"sort"
 	"strings"
 )
 
@@ -30,12 +31,41 @@ func newHourExpression(hourStr string) (*hourExpression, error) {
 		hourUnits = append(hourUnits, unitExpression)
 	}
 
+	// 简单对开始时间排序(从小到大)
+	sort.Slice(hourUnits, func(i, j int) bool {
+		return hourUnits[i].start.toSec() < hourUnits[j].start.toSec()
+	})
+
 	expression := &hourExpression{
 		hourUnits: hourUnits,
 		isAll:     isAll,
 	}
 
+	err := expression.check()
+	if err != nil {
+		return nil, err
+	}
+
 	return expression, nil
+}
+
+// check 检查参数
+func (expression *hourExpression) check() error {
+
+	// 时间不能有重叠
+	// 时间已经被排序过了
+	var preUnit *hourUnitExpression
+	for _, unit := range expression.hourUnits {
+		if preUnit == nil {
+			preUnit = unit
+		} else {
+			if preUnit.end.toSec() >= unit.start.toSec() {
+				return errors.New("hour error: time overlapping")
+			}
+		}
+	}
+
+	return nil
 }
 
 func (expression *hourExpression) isIn(hour, minute, sec int) bool {

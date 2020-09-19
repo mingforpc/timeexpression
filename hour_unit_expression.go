@@ -1,6 +1,7 @@
 package timeexpression
 
 import (
+	"errors"
 	"strings"
 )
 
@@ -52,7 +53,23 @@ func newHourUnitExpression(unitStr string) (*hourUnitExpression, error) {
 		return nil, err
 	}
 
+	err = expression.check()
+	if err != nil {
+		return nil, err
+	}
+
 	return expression, nil
+}
+
+// check 检查参数是否正确
+func (expression *hourUnitExpression) check() error {
+	startSec := expression.start.toSec()
+	endSec := expression.end.toSec()
+	if startSec >= endSec {
+		return errors.New("hour error: start after end")
+	}
+
+	return nil
 }
 
 // isIn 是否在表达式范围内

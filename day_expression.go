@@ -52,7 +52,21 @@ func newDayExpression(expression string) (*dayExpression, error) {
 		dayExpression.end = dayExpression.start
 	}
 
+	err = dayExpression.check()
+	if err != nil {
+		return nil, err
+	}
+
 	return dayExpression, nil
+}
+
+// check 检查参数
+func (expression *dayExpression) check() error {
+	if expression.start > expression.end {
+		return errors.New("day error: start after end")
+	}
+
+	return nil
 }
 
 func (expression *dayExpression) isIn(day int) bool {

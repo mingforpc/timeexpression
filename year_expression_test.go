@@ -1,6 +1,7 @@
 package timeexpression
 
 import (
+	"errors"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
@@ -55,6 +56,10 @@ func TestNewYearExpression(t *testing.T) {
 				ValueElem:  "a",
 				Message:    "",
 			},
+		},
+		{
+			exp: "2001-1999",
+			err: errors.New("year error: start after end"),
 		},
 	}
 

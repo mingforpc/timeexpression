@@ -57,6 +57,10 @@ func TestNewMonthExpression(t *testing.T) {
 				Message:    "",
 			},
 		},
+		{
+			expr: "06-03",
+			err:  errors.New("month error: start after end"),
+		},
 	}
 
 	for _, testData := range testDataList {

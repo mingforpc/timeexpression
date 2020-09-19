@@ -64,6 +64,13 @@ func TestNewDayExpression(t *testing.T) {
 			end:   0,
 			isAll: false,
 		},
+		{
+			exp:   "03-02",
+			err:   errors.New("day error: start after end"),
+			start: 0,
+			end:   0,
+			isAll: false,
+		},
 	}
 
 	for _, data := range testDatas {

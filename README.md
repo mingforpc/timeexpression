@@ -4,7 +4,7 @@
 [![Forks](https://img.shields.io/github/forks/mingforpc/timeexpression)]()
 [![Stars](https://img.shields.io/github/stars/mingforpc/timeexpression)]()
 [![Forks](https://img.shields.io/github/license/mingforpc/timeexpression)]()
-[![Coverage](https://img.shields.io/badge/coverage-93%25-yellowgreen.svg)]()
+[![Coverage](https://img.shields.io/badge/coverage-94%25-yellowgreen.svg)]()
 
 一个时间表达式的工具，方便用于配置活动时间。
 
@@ -37,7 +37,6 @@ isIn := expr.IsIn(now)             // 结果 false
 
 ## TODO:
 
-0. 更好的参数检验和检查
 1. 语法上支持: `w`开头配置按星期几的方式
 2. 语法上支持: `r`开头配置相对开始时间的方式
 3. 支持计算周期已经开始了多少次，本次周期是第几次等函数

@@ -1,10 +1,53 @@
 package timeexpression
 
 import (
+	"errors"
+	"fmt"
 	"github.com/stretchr/testify/assert"
 	"testing"
 	"time"
 )
+
+func TestHourExpression_new(t *testing.T) {
+	testDatas := []struct {
+		exp   string
+		err   error
+		isAll bool
+	}{
+		{
+			exp:   "*",
+			err:   nil,
+			isAll: true,
+		},
+		{
+			exp:   "11:00:00-12:00:00,13:00:00-14:00:00",
+			err:   nil,
+			isAll: false,
+		},
+		{
+			exp:   "11:00:00-12:00:00,12:00:00-14:00:00",
+			err:   errors.New("hour error: time overlapping"),
+			isAll: false,
+		},
+		{
+			exp:   "11:00:00-12:00:00,11:30:00-14:00:00",
+			err:   errors.New("hour error: time overlapping"),
+			isAll: false,
+		},
+	}
+
+	for i, data := range testDatas {
+		fmt.Printf("[%d] [%s]\n", i, data.exp)
+		expression, err := newHourExpression(data.exp)
+		if data.err != nil {
+			assert.NotNil(t, err)
+			assert.EqualError(t, data.err, err.Error())
+		} else {
+			assert.NotNil(t, expression)
+			assert.Equal(t, data.isAll, expression.isAll)
+		}
+	}
+}
 
 func TestHourExpression_IsIn(t *testing.T) {
 	expression, err := newHourExpression("13:00:03-16:59:59,23:00:00-23:30:00")

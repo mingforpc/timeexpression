@@ -52,7 +52,20 @@ func newMonthExpression(expression string) (*monthExpression, error) {
 		monthExpression.end = monthExpression.start
 	}
 
+	err = monthExpression.check()
+	if err != nil {
+		return nil, err
+	}
+
 	return monthExpression, nil
+}
+
+func (expression *monthExpression) check() error {
+	if expression.start > expression.end {
+		return errors.New("month error: start after end")
+	}
+
+	return nil
 }
 
 // isIn 月份是否在周期内

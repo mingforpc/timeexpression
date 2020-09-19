@@ -1,6 +1,7 @@
 package timeexpression
 
 import (
+	"errors"
 	"strings"
 	"time"
 )
@@ -52,7 +53,21 @@ func newYearExpression(expression string) (*yearExpression, error) {
 		yearExpression.end = yearExpression.start
 	}
 
+	err = yearExpression.check()
+	if err != nil {
+		return nil, err
+	}
+
 	return yearExpression, nil
+}
+
+// check 检查参数
+func (expression *yearExpression) check() error {
+	if expression.start > expression.end {
+		return errors.New("year error: start after end")
+	}
+
+	return nil
 }
 
 // isIn 是否在范围内
