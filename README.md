@@ -6,11 +6,6 @@
 [![Forks](https://img.shields.io/github/license/mingforpc/timeexpression)]()
 [![Coverage](https://img.shields.io/badge/coverage-93%25-yellowgreen.svg)]()
 
-GitHub forks:
-GitHub stars:
-GitHub license:
-
-
 一个时间表达式的工具，方便用于配置活动时间。
 
 ## 语法格式
