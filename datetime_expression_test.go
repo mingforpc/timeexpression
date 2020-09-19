@@ -629,6 +629,12 @@ func TestDateTimeExpression_GetStartTime_Hour(t *testing.T) {
 			err:    ErrOutOfDate,
 			result: time.Time{},
 		},
+		{
+			exp:    "[2000][02-04][05-07][8:00:00-10:00:00,11:00:00-12:30:30]",
+			input:  time.Date(2000, time.April, 7, 12, 30, 30, 0, time.Local),
+			err:    ErrOutOfDate,
+			result: time.Time{},
+		},
 	}
 	for i, data := range testDatas {
 		fmt.Printf("[%d] exp:%s\n", i, data.exp)
@@ -1131,5 +1137,51 @@ func TestDateTimeExpression_GetEndTime_Hour(t *testing.T) {
 		endTime, err := expr.GetEndTime(data.input)
 		assert.Equal(t, data.err, err)
 		assert.Equal(t, data.result, endTime)
+	}
+}
+
+func TestDateTimeExpression_GetNextStartTime(t *testing.T) {
+	testDatas := []struct {
+		exp    string
+		input  time.Time
+		err    error
+		result time.Time
+	}{
+		{
+			exp:    "[*][*][*][*]",
+			input:  time.Date(2000, time.January, 8, 0, 0, 00, 0, time.Local),
+			err:    ErrAlwaysActiveNoStartTime,
+			result: time.Time{},
+		},
+		{
+			exp:    "[2000][02-04][05-07][8:00:00-10:00:00,11:00:00-12:30:30]",
+			input:  time.Date(2000, time.January, 8, 0, 0, 00, 0, time.Local),
+			err:    nil,
+			result: time.Date(2000, time.February, 5, 8, 00, 00, 0, time.Local),
+		},
+		{
+			exp:    "[2000][02-04][05-07][8:00:00-10:00:00,11:00:00-12:30:30]",
+			input:  time.Date(2000, time.February, 5, 9, 0, 00, 0, time.Local),
+			err:    nil,
+			result: time.Date(2000, time.February, 5, 11, 00, 00, 0, time.Local),
+		},
+		{
+			exp:    "[2000][02-04][05-07][8:00:00-10:00:00,11:00:00-12:30:30]",
+			input:  time.Date(2000, time.April, 8, 0, 0, 00, 0, time.Local),
+			err:    ErrOutOfDate,
+			result: time.Time{},
+		},
+	}
+
+	for i, data := range testDatas {
+		fmt.Printf("[%d] exp:%s\n", i, data.exp)
+		expr, err := NewDateTimeExpression(data.exp)
+		if err != nil {
+			panic(err)
+		}
+
+		nextStartTime, err := expr.GetNextStartTime(data.input)
+		assert.Equal(t, data.err, err)
+		assert.Equal(t, data.result, nextStartTime)
 	}
 }

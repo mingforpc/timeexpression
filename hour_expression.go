@@ -76,7 +76,7 @@ func (expression *hourExpression) getStart(hour, min, sec int) (hourUint hourUni
 			minUnit = &unit.start
 		}
 
-		if paramSec > unit.end.toSec() {
+		if paramSec >= unit.end.toSec() {
 			continue
 		}
 		if targetUnit == nil || targetUnit.toSec() > unit.start.toSec() {
