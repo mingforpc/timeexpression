@@ -90,7 +90,7 @@ func TestNewDateTimeExpression(t *testing.T) {
 		expression, err := NewDateTimeExpression(testData.expr)
 		assert.Equal(t, testData.hasErr, err != nil)
 		if err == nil {
-			assert.Equal(t, testData.alwaysActive, expression.AlwaysActive)
+			assert.Equal(t, testData.alwaysActive, expression.alwaysActive)
 		}
 	}
 
